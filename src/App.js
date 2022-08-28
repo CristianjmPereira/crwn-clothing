@@ -1,5 +1,12 @@
+import Directory from './components/directory/directory.component';
+import jsonCategories from './resources/categories.json';
+
 const App = () => {
-    return <div>Hello World</div>;
+    const categories = jsonCategories;
+
+    return (
+      <Directory categories={categories}/>
+    );
 };
 
 export default App;
