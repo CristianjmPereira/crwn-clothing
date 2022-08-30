@@ -7,8 +7,7 @@ import "./authentication.styles.scss";
 const Authentication = () => {
     return (
         <Fragment>
-            <div>
-                <h1>Sign in component</h1>
+            <div className="authentication-container">
                 <SignInForm />
                 <SignUpForm />
             </div>
