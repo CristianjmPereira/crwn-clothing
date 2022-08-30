@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
@@ -13,7 +13,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebaseapp = initializeApp(firebaseConfig);
+export const firebaseapp = initializeApp(firebaseConfig);
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
@@ -41,7 +41,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
                 displayName,
                 email,
                 createdAt,
-                ...additionalInformation
+                ...additionalInformation,
             });
         } catch (e) {
             console.log("Error creating user ", e.message);
@@ -54,6 +54,11 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
     if (!email || !password) return;
 
+    return await createUserWithEmailAndPassword(auth, email, password);
+};
 
-    return await createUserWithEmailAndPassword(auth, email, password)
-}
+export const sighInUserWithEmailAndPassword = async (email, password) => {
+    if (!email || !password) return;
+
+    return await signInWithEmailAndPassword(auth, email, password);
+};
