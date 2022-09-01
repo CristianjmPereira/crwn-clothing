@@ -4,12 +4,16 @@ const addCartItem = (cartItems, productToAdd) => {
     const existingCartItem = cartItems.find(({ id }) => id === productToAdd.id);
 
     if (existingCartItem) {
-        return cartItems.map((cartItem) =>
-            cartItem.id === productToAdd.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
-        );
+        return incrementQuantityCartItem(cartItems, productToAdd.id);
     }
 
     return [...cartItems, { ...productToAdd, quantity: 1 }];
+};
+
+const incrementQuantityCartItem = (cartItems, productId) => {
+    return cartItems.map((cartItem) =>
+        cartItem.id === productId ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+    );
 };
 
 const getCartQuantityItems = (cartItems) => {
@@ -23,6 +27,7 @@ export const CartContext = createContext({
     cartItems: [],
     toggleCart: () => {},
     cartCount: 0,
+    incrementCartItems: () => {},
 });
 
 export const CartProvider = ({ children }) => {
@@ -38,10 +43,14 @@ export const CartProvider = ({ children }) => {
         setCartItems(addCartItem(cartItems, productToAdd));
     };
 
-    useEffect(() => {
-        setCartCount(getCartQuantityItems(cartItems))
-    }, [cartItems])
+    const incrementCartItems = (productId) => {
+        setCartItems(incrementQuantityCartItem(cartItems, productId));
+    }
 
-    const value = { isCartOpen, toggleCart, addItemToCart, cartItems, cartCount };
+    useEffect(() => {
+        setCartCount(getCartQuantityItems(cartItems));
+    }, [cartItems]);
+
+    const value = { isCartOpen, toggleCart, addItemToCart, cartItems, cartCount, incrementCartItems };
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
