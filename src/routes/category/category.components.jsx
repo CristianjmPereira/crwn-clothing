@@ -17,7 +17,6 @@ const Category = () => {
         setProducts(categoriesMap[category]);
     }, [category, categoriesMap]);
 
-    console.log({category})
     return (
         <Fragment>
             <h2 className="category-title">{category.toLocaleUpperCase()}</h2>
