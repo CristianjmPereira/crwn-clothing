@@ -43,7 +43,7 @@ export const BackgroundImage = styled.div`
     background-size: cover;
     background-position: center;
     //This is used to use passed props from the caller file
-    background-image: url(${(props) => props.imageUrl});
+    background-image: url(${({ imageUrl }) => imageUrl});
 `;
 
 export const DirectoryItemBody = styled.div`
