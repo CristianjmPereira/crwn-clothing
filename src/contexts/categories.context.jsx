@@ -1,15 +1,44 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { getCategoriesAndDocuments } from "../utils/firebase/firebase.utils";
+import { createAction } from "../utils/reducer/reducer.utils";
 
 export const CategoriesContext = createContext({
     categoriesMap: {},
 });
 
-export const CategoriesProvider = ({ children }) => {
-    const [categoriesMap, setCategoriesMap] = useState({});
-    const values = {
-        categoriesMap
+export const CATEGORIES_ACTION_TYPES = {
+    SET_CATEGORIES_MAP: "SET_CATEGORIES_MAP",
+};
+
+const categoriesReducer = (state, action) => {
+    const { type, payload } = action;
+
+    switch (type) {
+        case CATEGORIES_ACTION_TYPES.SET_CATEGORIES_MAP:
+            return {
+                ...state,
+                categoriesMap: payload,
+            };
+        default:
+            throw new Error(`Unhandled type of ${type} in categoriesReducer`);
     }
+};
+
+const INITIAL_STATE = {
+    categoriesMap: {},
+};
+
+export const CategoriesProvider = ({ children }) => {
+    const [{ categoriesMap }, dispatch] = useReducer(categoriesReducer, INITIAL_STATE);
+
+    const setCategoriesMap = (categories) => {
+        const action = createAction(CATEGORIES_ACTION_TYPES.SET_CATEGORIES_MAP, categories);
+        dispatch(action);
+    };
+
+    const values = {
+        categoriesMap,
+    };
 
     useEffect(() => {
         const getCategoriesMap = async () => {
@@ -20,5 +49,5 @@ export const CategoriesProvider = ({ children }) => {
         getCategoriesMap();
     }, []);
 
-    return <CategoriesContext.Provider value={values}>{children}</CategoriesContext.Provider>
-}
+    return <CategoriesContext.Provider value={values}>{children}</CategoriesContext.Provider>;
+};

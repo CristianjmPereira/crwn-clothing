@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useReducer } from "react";
+import { createAction } from "../utils/reducer/reducer.utils";
 
 const addCartItem = (cartItems, productToAdd) => {
     const existingCartItem = cartItems.find(({ id }) => id === productToAdd.id);
@@ -24,7 +25,7 @@ const getCartQuantityItems = (cartItems) => {
 
 const getCartTotalPriceItems = (cartItems) => {
     return cartItems.reduce((total, cartItem) => {
-        return total + (cartItem.quantity * cartItem.price);
+        return total + cartItem.quantity * cartItem.price;
     }, 0);
 };
 
@@ -47,54 +48,93 @@ const clearCartItem = (cartItems, cartItemToClear) => {
 export const CartContext = createContext({
     isCartOpen: false,
     cartItems: [],
-    toggleCart: () => {},
     cartCount: 0,
     cartTotal: 0,
+    toggleCart: () => {},
     incrementCartItems: () => {},
     removeItemToCart: () => {},
 });
 
+const INITIAL_VALUES = {
+    isCartOpen: false,
+    cartItems: [],
+    cartCount: 0,
+    cartTotal: 0,
+};
+
+const CART_ACTION_TYPES = {
+    SET_CART_ITEMS: "SET_CART_ITEMS",
+    SET_IS_CART_OPEN: "SET_IS_CART_OPEN",
+};
+
+const cartReducer = (state, action) => {
+    const { type, payload } = action;
+    switch (type) {
+        case CART_ACTION_TYPES.SET_CART_ITEMS:
+            return {
+                ...state,
+                ...payload,
+            };
+        case CART_ACTION_TYPES.SET_IS_CART_OPEN:
+            return {
+                ...state,
+                isCartOpen: payload
+            }
+        default: {
+            throw new Error(`Unhandled type of ${type} in cartReducer`);
+        }
+    }
+};
+
 export const CartProvider = ({ children }) => {
-    const [isCartOpen, setIsCartOpen] = useState(false);
-    const [cartItems, setCartItems] = useState([]);
-    const [cartCount, setCartCount] = useState(0);
-    const [cartTotal, setCartTotal] = useState(0);
+    const [{ cartItems, cartCount, cartTotal, isCartOpen }, dispatch] = useReducer(cartReducer, INITIAL_VALUES);
 
-    useEffect(() => {
-        setCartCount(getCartQuantityItems(cartItems));
-    }, [cartItems]);
-
-    useEffect(() => {
-        setCartTotal(getCartTotalPriceItems(cartItems));
-    }, [cartItems]);
 
     const toggleCart = () => {
-        setIsCartOpen((prev) => !prev);
+        const action = createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, !isCartOpen);
+        dispatch(action);
+    };
+
+    const updateCartItemsReducer = (newCartItems) => {
+        const newCartCount = getCartQuantityItems(newCartItems);
+        const newCartTotal = getCartTotalPriceItems(newCartItems);
+        
+        const action = createAction(CART_ACTION_TYPES.SET_CART_ITEMS, {
+            cartItems: newCartItems,
+            cartCount: newCartCount,
+            cartTotal: newCartTotal,
+        });
+
+        dispatch(action);
     };
 
     const addItemToCart = (productToAdd) => {
-        setCartItems(addCartItem(cartItems, productToAdd));
+        const newCartItems = addCartItem(cartItems, productToAdd);
+        updateCartItemsReducer(newCartItems);
     };
 
     const incrementCartItems = (cartItem) => {
-        setCartItems(incrementQuantityCartItem(cartItems, cartItem));
+        const newCartItems = incrementQuantityCartItem(cartItems, cartItem);
+        updateCartItemsReducer(newCartItems);
     };
 
     const removeItemToCart = (cartItemToRemove) => {
-        setCartItems(removeCartItem(cartItems, cartItemToRemove));
+        const newCartItems = removeCartItem(cartItems, cartItemToRemove);
+        updateCartItemsReducer(newCartItems);
     };
 
     const clearItemFromCart = (cartItemToClear) => {
-        setCartItems(clearCartItem(cartItems, cartItemToClear));
+        const newCartItems = clearCartItem(cartItems, cartItemToClear);
+        updateCartItemsReducer(newCartItems);
     };
 
     const value = {
         isCartOpen,
-        toggleCart,
-        addItemToCart,
         cartItems,
         cartCount,
         cartTotal,
+        toggleCart,
+        addItemToCart,
         incrementCartItems,
         removeItemToCart,
         clearItemFromCart,
