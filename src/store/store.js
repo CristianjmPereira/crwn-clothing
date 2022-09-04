@@ -5,21 +5,6 @@ import storage from 'redux-persist/lib/storage';
 
 import { rootReducer } from './root-reducer';
 
-// Middleware example
-// const loggerMiddleware = (state) => (next) => (action) => {
-//     if (!action.type) {
-//         return next(action);
-//     }
-
-//     console.log('type: ', action.type);
-//     console.log('payload: ', action.payload);
-//     console.log('currentState: ', state);
-
-//     next(action);
-
-//     console.log('next state: ', state.getState());
-// }
-
 const persistConfig = {
     key: 'root',
     storage,
@@ -28,9 +13,16 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+// Print current environment
+// console.log(process.env.NODE_ENV);
 const middleWares = [logger];
 
-const composeEnhancers = compose(applyMiddleware(...middleWares))
+const composeEnhancer = (
+    window &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+) || compose;
+
+const composeEnhancers = composeEnhancer(applyMiddleware(...middleWares))
 
 export const store = createStore(persistedReducer, undefined, composeEnhancers);
 
