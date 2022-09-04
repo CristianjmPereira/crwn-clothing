@@ -1,14 +1,11 @@
 import { createContext, useEffect, useReducer } from "react";
+import { CATEGORIES_ACTION_TYPES } from "../store/categories/category.types";
 import { getCategoriesAndDocuments } from "../utils/firebase/firebase.utils";
 import { createAction } from "../utils/reducer/reducer.utils";
 
 export const CategoriesContext = createContext({
     categoriesMap: {},
 });
-
-export const CATEGORIES_ACTION_TYPES = {
-    SET_CATEGORIES_MAP: "SET_CATEGORIES_MAP",
-};
 
 const categoriesReducer = (state, action) => {
     const { type, payload } = action;
