@@ -52,7 +52,7 @@ export const CartContext = createContext({
     cartTotal: 0,
     toggleCart: () => {},
     incrementCartItems: () => {},
-    removeItemToCart: () => {},
+    removeItemFromCart: () => {},
 });
 
 const INITIAL_VALUES = {
@@ -118,7 +118,7 @@ export const CartProvider = ({ children }) => {
         updateCartItemsReducer(newCartItems);
     };
 
-    const removeItemToCart = (cartItemToRemove) => {
+    const removeItemFromCart = (cartItemToRemove) => {
         const newCartItems = removeCartItem(cartItems, cartItemToRemove);
         updateCartItemsReducer(newCartItems);
     };
@@ -136,7 +136,7 @@ export const CartProvider = ({ children }) => {
         toggleCart,
         addItemToCart,
         incrementCartItems,
-        removeItemToCart,
+        removeItemFromCart,
         clearItemFromCart,
     };
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
