@@ -68,7 +68,7 @@ export function* onSignUpStart() {
 }
 
 export function* onSignUpSuccess() {
-    yield takeLatest(USER_ACTION_TYPES.SIGN_IN_SUCCESS, signInAfterSignUp);
+    yield takeLatest(USER_ACTION_TYPES.SIGN_UP_SUCCESS, signInAfterSignUp);
 }
 
 export function* onEmailSignInStart() {
