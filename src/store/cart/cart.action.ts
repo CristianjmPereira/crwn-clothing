@@ -2,7 +2,7 @@ import { CartItem, CART_ACTION_TYPES } from "./cart.types";
 import { ActionWithPayload, createAction, withMatcher } from "../../utils/reducer/reducer.utils";
 import { CategoryItem } from "../categories/category.types";
 
-const addCartItem = (cartItems: CartItem[], productToAdd: CategoryItem): CartItem[] => {
+const addCartItem = (cartItems = [] as CartItem[], productToAdd: CategoryItem): CartItem[] => {
     const existingCartItem = cartItems.find(({ id }) => id === productToAdd.id);
 
     if (existingCartItem) {
@@ -12,13 +12,13 @@ const addCartItem = (cartItems: CartItem[], productToAdd: CategoryItem): CartIte
     return [...cartItems, { ...productToAdd, quantity: 1 }];
 };
 
-const incrementQuantityCartItem = (cartItems: CartItem[], product: CategoryItem): CartItem[] => {
+const incrementQuantityCartItem = (cartItems = [] as CartItem[], product: CategoryItem): CartItem[] => {
     return cartItems.map((cartItem) =>
         cartItem.id === product.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
     );
 };
 
-const removeCartItem = (cartItems: CartItem[], cartItemToRemove: CartItem): CartItem[] => {
+const removeCartItem = (cartItems = [] as CartItem[], cartItemToRemove: CartItem): CartItem[] => {
     const existingCartItem = cartItems.find(({ id }) => id === cartItemToRemove.id);
 
     if (existingCartItem && existingCartItem.quantity === 1) {
@@ -30,7 +30,7 @@ const removeCartItem = (cartItems: CartItem[], cartItemToRemove: CartItem): Cart
     );
 };
 
-const clearCartItem = (cartItems: CartItem[], cartItemToClear: CartItem) => {
+const clearCartItem = (cartItems = [] as CartItem[], cartItemToClear: CartItem) => {
     return cartItems.filter(({ id }) => id !== cartItemToClear.id);
 };
 
