@@ -1,7 +1,13 @@
+import { CategoryItem } from "../../store/categories/category.types";
 import ProductCard from "../product-card/product-card.component";
 import { CategoryPreviewContainer, PreviewContainer, TitleLink } from "./category-preview.styles";
 
-const CategoryPreview = ({ title, products }) => {
+export type CategoryPreviewPops = {
+    title: string;
+    products: CategoryItem[]
+}
+
+const CategoryPreview = ({ title, products }: CategoryPreviewPops) => {
     return (
         <CategoryPreviewContainer>
             <h2>
