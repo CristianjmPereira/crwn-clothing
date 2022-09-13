@@ -1,6 +1,11 @@
+import { CartItem as CartItemType } from '../../store/cart/cart.types.js';
 import { CartItemContainer, ItemDetails } from './cart-item.styles.jsx';
 
-const CartItem = ({ item }) => {
+export type CartItemProps = {
+    item: CartItemType
+}
+
+const CartItem = ({ item }: CartItemProps) => {
     const { name, imageUrl, price, quantity } = item;
 
     return (
