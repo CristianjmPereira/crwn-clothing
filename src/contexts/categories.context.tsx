@@ -48,3 +48,5 @@
 
 //     return <CategoriesContext.Provider value={values}>{children}</CategoriesContext.Provider>;
 // };
+
+export {}
