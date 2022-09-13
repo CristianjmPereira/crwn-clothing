@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { AuthError, AuthErrorCodes } from "firebase/auth";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { emailSignInStart, googleSignInStart } from "../../store/user/user.action";
 import Button, { BUTTON_TYPES_CLASSES } from "../button/button.component";
@@ -22,31 +23,31 @@ const SignInForm = () => {
         try {
             dispatch(googleSignInStart());
         } catch (error) {
-            console.log(error.message);
+            console.log((error as AuthError).message);
         };
     };
 
-    const handleChange = (event) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = event.target;
         setFormFields({ ...formFields, [name]: value });
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         try {
             dispatch(emailSignInStart(email, password));
             resetFormFields();
         } catch (error) {
-            switch (error.code) {
-                case "auth/wrong-password":
+            switch ((error as AuthError).code) {
+                case AuthErrorCodes.INVALID_PASSWORD:
                     alert("Incorrect password for email");
                     break;
-                case "auth/user-not-found":
+                case AuthErrorCodes.USER_DELETED:
                     alert("No user associated with this email");
                     break;
                 default:
-                    console.log("User creation encountered and error: ", error.message);
+                    console.log("User creation encountered and error: ", (error as AuthError).message);
             }
         }
     };
