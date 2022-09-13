@@ -1,5 +1,5 @@
-import { CartItem as CartItemType } from '../../store/cart/cart.types.js';
-import { CartItemContainer, ItemDetails } from './cart-item.styles.jsx';
+import { CartItem as CartItemType } from '../../store/cart/cart.types';
+import { CartItemContainer, ItemDetails } from './cart-item.styles';
 
 export type CartItemProps = {
     item: CartItemType
