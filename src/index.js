@@ -5,7 +5,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import { Elements } from "@stripe/react-stripe-js";
 
-import "./index.scss";
 import App from "./App";
 import { persistor, store } from "./store/store";
 import { stripePromise } from "./utils/stripe/stripe.utils";

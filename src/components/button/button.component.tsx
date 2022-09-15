@@ -5,7 +5,7 @@ export enum BUTTON_TYPES_CLASSES {
     base = "base",
     google = "google-sign-in",
     inverted = "inverted",
-};
+}
 
 const getButton = (buttonType = BUTTON_TYPES_CLASSES.base): typeof BaseButton =>
     ({
@@ -15,8 +15,8 @@ const getButton = (buttonType = BUTTON_TYPES_CLASSES.base): typeof BaseButton =>
     }[buttonType]);
 
 export type ButtonProps = {
-    buttonType?: BUTTON_TYPES_CLASSES,
-    isLoading?: boolean
+    buttonType?: BUTTON_TYPES_CLASSES;
+    isLoading?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button: FC<ButtonProps> = ({ children, buttonType, isLoading, ...otherProps }) => {
